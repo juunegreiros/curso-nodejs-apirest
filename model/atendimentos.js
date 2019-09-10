@@ -10,12 +10,8 @@ class Atendimento {
     const sql = `INSERT INTO Atendimentos(cliente, pet, servico, status, observacoes, data, dataCriacao) VALUES('${cliente}', '${pet}', '${servico}', '${status}', '${observacoes}', '${dataAgendamento}', '${dataCriacao}')`
 
     conexao.query(sql, (erro, resultados, campos) => {
-      if(erro) {
-        res.json(erro)
-      } else {
         res.json(resultados)
         console.log('executou a query!')
-      }
     })
   }
 }
