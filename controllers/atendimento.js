@@ -1,4 +1,5 @@
 const Atendimento = require('../model/atendimentos')
+const { check } = require('express-validator')
 
 module.exports = app => {
   app.get('/atendimentos', (req, res) => {
@@ -6,10 +7,12 @@ module.exports = app => {
     res.send('Get  Atendimento')
   })
 
-  app.post('/atendimentos', (req, res) => {
+  app.post('/atendimentos', [
+    check('cliente').isLength({ min: 5 }).withMessage('nome do cliente deve possuir pelo menos 5 caracteres')
+  ], (req, res) => {
     const atendimento = req.body
     console.log('Atendimento enviado')
     console.log(atendimento)
-    Atendimento.adiciona(res, atendimento)
+    Atendimento.adiciona(req, res, atendimento)
   })
 }
