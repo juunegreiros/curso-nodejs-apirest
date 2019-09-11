@@ -12,4 +12,17 @@ module.exports = app => {
     console.log(atendimento)
     Atendimento.adiciona(res, atendimento)
   })
+
+  app.get('/atendimentos/:id', (req, res) => {
+    const id = parseInt(req.params.id)
+
+    Atendimento.busca(res, id)
+  })
+
+  app.patch('/atendimentos/:id', (req, res) => {
+    const item = req.body
+    const id = parseInt(req.params.id)
+
+    Atendimento.altera(res, item, id)
+  })
 }
