@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "axios": "^0.19.0",
     "body-parser": "^1.19.0",
     "consign": "^0.1.6",
     "express": "^4.17.1",
@@ -14,6 +15,7 @@
   "devDependencies": {},
   "scripts": {
     "start": "nodemon server.js",
+    "clientes-api": "node servicos/api.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

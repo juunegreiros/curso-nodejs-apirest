@@ -1,5 +1,6 @@
 const moment = require('moment')
 const conexao = require('../infraestrutura/conexao')
+const axios = require('axios')
 
 class Atendimento {
   adiciona(res, item) {
@@ -45,14 +46,18 @@ class Atendimento {
     }
   }
 
-  lista(res) {
+  lista(res, cliente) {
     const sql = 'select * from Atendimentos'
 
     conexao.query(sql, (erro, resultados, campos) => {
       if(erro) {
         res.status(400).json(erro)
       } else {
-        res.status(200).json(resultados)
+        res
+          .status(200)
+          .json(
+            resultados.map(resultado => ({ ...resultado, cliente }))
+          )
       }
     })
   }
@@ -64,7 +69,12 @@ class Atendimento {
       if(erro) {
         res.status(400).json(erro)
       } else {
-        res.status(200).json(resultados)
+        const atendimento = resultados.shift()
+        axios
+          .get(`http://localhost:8082?cpf=${atendimento.cliente}`)
+          .then(({ data: cliente }) => {
+            res.status(200).json({ ...atendimento, cliente })
+          })
       }
     })
   }
@@ -73,6 +83,19 @@ class Atendimento {
     const sql = `update Atendimentos set ? where id=${id}`
     
     conexao.query(sql, item, (erro, resultados, campos) => {
+      if(erro) {
+        res.status(400).json(erro)
+      } else {
+        res.status(200).json(resultados)
+      }
+    })
+
+  }
+  
+  deleta(res, id) {
+    const sql = `delete from Atendimentos where id=${id}`
+    
+    conexao.query(sql, (erro, resultados, campos) => {
       if(erro) {
         res.status(400).json(erro)
       } else {

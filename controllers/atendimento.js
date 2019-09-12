@@ -1,9 +1,12 @@
 const Atendimento = require('../model/atendimentos')
+const axios = require('axios')
 
 module.exports = app => {
-  app.get('/atendimentos', (req, res) => {
+  app.get('/atendimentos', async (req, res) => {
     console.log('Recebida requisicao atendimento')
-    Atendimento.lista(res)
+
+    const { data } = await axios.get('http://localhost:8082')
+    Atendimento.lista(res, data)
   })
 
   app.post('/atendimentos', (req, res) => {
@@ -24,5 +27,11 @@ module.exports = app => {
     const id = parseInt(req.params.id)
 
     Atendimento.altera(res, item, id)
+  })
+
+  app.delete('/atendimentos/:id', (req, res) => {
+    const id = parseInt(req.params.id)
+
+    Atendimento.deleta(res, id)
   })
 }
